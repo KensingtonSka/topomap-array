@@ -11,12 +11,29 @@ __version__ = '1.0'
 
 def project_onto_zplane(xyz2use, projection='z-shift',
                         scale_seperation_distance=-1, ch_names=None):
-    '''
+    ''' Projects a set of xyz coordinates onto the z-plane.
+            
+        xyz2use : np.array
+            A (n, 3) numpy array of xyz coordinates (in that order).
+            
+        projection : str, default='z-shift'
+            How to project the xyz coordinates onto the z-plane.
+                'z': This projection simply sets the z-coordinates to zero.
+                'z-scale': This projection scales the y-coordinates by the 
+                           magnitude of the z-coordinate. This sets
+                           scale_seperation_distance = 1 to ensure no points 
+                           are substantially far.
+                'stereographic': A standard stereographic projection.
+
         scale_seperation_distance : int, float, default=1.5
             Number of standard deviations a xy sensor can be away from the 
             mean of the other sensors before it's considered and outlier. If 
             it is conisdered an outlier it's xy coordinates are scaled until 
             it's within the scale_seperation_distance range.
+            
+        ch_names : list of str
+            Used for plotting final coordinate positions. An n length list of 
+            strings which identify each coordinate.
     '''
     ssp = scale_seperation_distance
     ### Build montage positions by applying a cartesian stereographic projection:
@@ -30,12 +47,16 @@ def project_onto_zplane(xyz2use, projection='z-shift',
     if projection == 'z':
         print('Setting z-coordinates to 0.')
         xy2use = np.array([np.array([r[0], r[1]]) for r in xyz2use])
+        
     elif projection == 'z-shift':
-        print('Scaling xy-coordinates by the magnitude of the z-coordinate.')
+        print('Scaling y-coordinate by the magnitude of the z-coordinate.')
         xy2use = np.array([np.array([r[0], r[1]]) for r in xyz2use])
         sign = np.nan_to_num(np.sign(xy2use[:,1]))
         xy2use[:,1] = xy2use[:,1] + np.abs(xyz2use[:, 2])*sign
-        # xy2use[:,1] = xy2use[:,1]/max(xy2use[:,1])
+        
+        #Turn on seperation scaling loop:
+        ssp=1
+        
     elif projection == 'stereographic':
         print('Applying a cartesian stereographic projection.')
         xy2use = np.array([np.array([r[0], r[1]])/(1 - r[2]) for r in xyz2use])
@@ -125,6 +146,25 @@ def gen_grid_size(xy2use, sbp=1, verbose=True):
 
 
 def project_onto_grid(xy2use, grid_size, rotation_matrix=None, ch_names=None):
+    ''' Projects a set of xy coordinates onto a grid of a specified size.
+            
+        xy2use : np.array
+            A (n, 2) numpy array of xy coordinates (in that order).
+            
+        grid_size : list of ints
+            The size of the grid that the xy coordinates will be projected 
+            onto. Example: [14, 15], where the first is the x axis and the 
+            second is the y.
+
+        rotation_matrix : int, str, default=None
+            Number of degrees to rotate the xy coordinates by if the final 
+            result is in the wrong orientation. Additionally the strings
+            '90', '180', and '270' are also accepted.
+            
+        ch_names : list of str
+            Used for plotting final coordinate positions. An n length list of 
+            strings which identify each coordinate.
+    '''
     ## Choose the grid positions:
     # Default rotation mats:
     if rotation_matrix == '90':
