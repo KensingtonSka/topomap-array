@@ -5,6 +5,9 @@ The functions in `Topomap_Array.py` are used to take a set of xyz coordinates, m
 the z-plane (using three posible projections, see below), and use resulting values to assign 
 each coordinate a subplot number within a grid of subplots.
 
+I made this repo becuase I had trouble finding a similar function online which didn't have a lot 
+of unnecessary bloat.
+
 ## Projections:
 There are presently three projetions:
 1. `'z'`: This projection simply sets the z-coordinates to zero.
