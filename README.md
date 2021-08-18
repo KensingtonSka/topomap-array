@@ -1,3 +1,3 @@
 # Readme init
 
-![GitHub Logo](/example_figures/circle array final.png)
+![Circle Array](example_figures/circle array final.png)
