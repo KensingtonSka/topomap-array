@@ -19,5 +19,5 @@ used to generate a circle of subplots using the 'z' projection.
 
 
 We can also use more complicated sets of xyz coordiantes points, such as a set of electroencephalogram sensors ('z' projection):
-![Circle Array](example_figures/circle_array.png?raw=true "Title")
+![Circle Array](example_figures/10-20_array.png?raw=true "Title")
 
