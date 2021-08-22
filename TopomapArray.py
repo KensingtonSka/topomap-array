@@ -12,7 +12,9 @@ __version__ = '1.0'
 def project_onto_zplane(xyz2use, projection='z-shift',
                         scale_seperation_distance=-1, ch_names=None):
     ''' Projects a set of xyz coordinates onto the z-plane.
-            
+        
+        Parameters
+        ----------
         xyz2use : np.array
             A (n, 3) numpy array of xyz coordinates (in that order).
             
@@ -34,6 +36,11 @@ def project_onto_zplane(xyz2use, projection='z-shift',
         ch_names : list of str
             Used for plotting final coordinate positions. An n length list of 
             strings which identify each coordinate.
+          
+        Returns
+        ----------
+        xy2use : np.array
+          The result of projecting the xyz coordinates (passed in `xyz2use`) onto the z-plane.
     '''
     ssp = scale_seperation_distance
     ### Build montage positions by applying a cartesian stereographic projection:
@@ -102,10 +109,21 @@ def gen_grid_size(xy2use, sbp=1, verbose=True):
         The closest points will tell me how many grid squares are in a unit of xy 
         distance and the furtherest will tell me the total grid size.    
         
+        Parameters
+        ----------
         xy2use : np.array
             Numpy array of the x and y coordinates of the sensor positions.
             
         sbp : int, default=2
+          Shortest box path. The number of gridsquares seperating the two closest points (inclusive-1).
+          
+        verbose : bool, default=True
+          Print grid units and the estimated grid size.
+          
+        Returns
+        ----------
+        grid_size : int list
+          The number of grid spaces to have along the x and y directions of the subplot.
     '''
     ## Closest points:
     # I dont want to work out every combination of distance. That would be n! 
@@ -148,6 +166,8 @@ def gen_grid_size(xy2use, sbp=1, verbose=True):
 def project_onto_grid(xy2use, grid_size, rotation_matrix=None, ch_names=None):
     ''' Projects a set of xy coordinates onto a grid of a specified size.
             
+        Parameters
+        ----------
         xy2use : np.array
             A (n, 2) numpy array of xy coordinates (in that order).
             
@@ -164,6 +184,11 @@ def project_onto_grid(xy2use, grid_size, rotation_matrix=None, ch_names=None):
         ch_names : list of str
             Used for plotting final coordinate positions. An n length list of 
             strings which identify each coordinate.
+          
+        Returns
+        ----------
+        grid_pos : int list
+          The x y positions of each point in xy2use on the grid_size[0] x grid_size[1] subplot grid.
     '''
     ## Choose the grid positions:
     # Default rotation mats:
